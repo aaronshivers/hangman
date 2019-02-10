@@ -1,4 +1,1 @@
-# boilerplate
-# hangman
-# hangman
 # hangman
