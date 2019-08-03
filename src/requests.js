@@ -1,4 +1,4 @@
-const getPuzzle = async wordCount => {
+const getPuzzle = async (wordCount = 5) => {
   const url = `https://puzzle.mead.io/puzzle?wordCount=${wordCount}`
   try {
     const response = await fetch(url)
