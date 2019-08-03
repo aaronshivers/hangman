@@ -5,7 +5,6 @@ import Puzzle from './Puzzle'
 const puzzleElement = document.querySelector('#puzzle')
 const guessesElement = document.querySelector('#guesses')
 const statusElement = document.querySelector('#status')
-let game
 
 console.log(puzzleElement)
 
@@ -48,9 +47,18 @@ const reducer = (state, action) => {
   }
 }
 
+const guessReducer = (state, action) => {
+  switch (action.type) {
+    case 'ADD_GUESS':
+      return [ ...state, action.guess ]
+  }
+}
+
 const HangmanApp = () => {
   const [ state, dispatch ] = useReducer(reducer, initialState)
   const [ puzzle, setPuzzle ] = useState('')
+  const [ game, setGame ] = useState('')
+  const [ guesses, setGuesses ] = useReducer(guessReducer, [])
 
   const getPuzzle = async (wordCount = '2') => {
     const url = `https://puzzle.mead.io/puzzle?wordCount=${ wordCount }`
@@ -71,6 +79,8 @@ const HangmanApp = () => {
   if (state.count > 0) {
     window.addEventListener('keypress', e => {
       e.stopImmediatePropagation()
+      const guess = String.fromCharCode(event.charCode)
+      setGuesses({ type: 'ADD_GUESS', guess })
       dispatch({ type: 'DECREMENT' })
     })
   }
@@ -86,14 +96,15 @@ const HangmanApp = () => {
 
   return (
     <div>
-      <Puzzle puzzle={ puzzle } />
-      
+      <Puzzle
+        puzzle={ puzzle }
+        guesses={ guesses }
+      />
         {
           state.count > 0 ?
             <p>Remaining Guesses: { state.count }</p> :
             <p>Game Over</p>
         }
-      
       <button
         id="reset"
         className="button"

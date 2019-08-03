@@ -1,11 +1,16 @@
 import React, { useState } from 'react'
 
-const Puzzle = ({ puzzle }) => {
+const Puzzle = ({ puzzle, guesses }) => {
+  console.log(puzzle)
   return (
     <div id="puzzle" className="puzzle" >
       {
         puzzle.split('').map((char, i) => (
-          <span key={ i }>{ char }</span>
+          <span key={ i }>
+            {
+              guesses.includes(char) ? char : '*'
+            }
+          </span>
         ))
       }
     </div>
