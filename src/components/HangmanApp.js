@@ -50,7 +50,11 @@ const reducer = (state, action) => {
 const guessReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_GUESS':
-      return [ ...state, action.guess ]
+      if (state.includes(action.guess)) {
+        return state
+      } else {
+        return [ ...state, action.guess ]
+      }
   }
 }
 

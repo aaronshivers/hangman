@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 const Puzzle = ({ puzzle, guesses }) => {
-  console.log(puzzle)
+  console.log(puzzle, guesses)
   return (
     <div id="puzzle" className="puzzle" >
       {
