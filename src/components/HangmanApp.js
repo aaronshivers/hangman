@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react'
+import React, { useState, useReducer, useEffect } from 'react'
 import Puzzle from './Puzzle'
 // import Hangman from '../hangman'
 
@@ -50,6 +50,23 @@ const reducer = (state, action) => {
 
 const HangmanApp = () => {
   const [ state, dispatch ] = useReducer(reducer, initialState)
+  const [ puzzle, setPuzzle ] = useState('')
+
+  const getPuzzle = async (wordCount = '2') => {
+    const url = `https://puzzle.mead.io/puzzle?wordCount=${ wordCount }`
+    
+    try {
+      const response = await fetch(url)
+      const json = await response.json()
+      return response.ok ? json.puzzle : new Error('Unable to get new puzzle.')
+    } catch (error) {
+      return error
+    }
+  }
+
+  const newPuzzle = async () => {
+    setPuzzle(await getPuzzle())
+  }
 
   if (state.count > 0) {
     window.addEventListener('keypress', e => {
@@ -58,9 +75,18 @@ const HangmanApp = () => {
     })
   }
 
+  const handleReset = () => {
+    dispatch({ type: 'RESET' })
+    newPuzzle()
+  }
+
+  useEffect(() => {
+    newPuzzle()
+  }, [])
+
   return (
     <div>
-      <Puzzle />
+      <Puzzle puzzle={ puzzle } />
       
         {
           state.count > 0 ?
@@ -71,7 +97,7 @@ const HangmanApp = () => {
       <button
         id="reset"
         className="button"
-        onClick={ () => dispatch({ type: 'RESET' }) }
+        onClick={ handleReset }
       >Reset</button>
     </div>
   )
