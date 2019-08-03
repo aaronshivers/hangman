@@ -55,6 +55,8 @@ const guessReducer = (state, action) => {
       } else {
         return [ ...state, action.guess ]
       }
+    case 'RESET':
+      return []
   }
 }
 
@@ -91,6 +93,7 @@ const HangmanApp = () => {
 
   const handleReset = () => {
     dispatch({ type: 'RESET' })
+    setGuesses({ type: 'RESET' })
     newPuzzle()
   }
 

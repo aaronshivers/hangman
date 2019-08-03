@@ -5,10 +5,10 @@ const Puzzle = ({ puzzle, guesses }) => {
   return (
     <div id="puzzle" className="puzzle" >
       {
-        puzzle.split('').map((char, i) => (
+        puzzle.toLowerCase().split('').map((char, i) => (
           <span key={ i }>
             {
-              guesses.includes(char) ? char : '*'
+              guesses.includes(char) || char === ' ' ? char : '*'
             }
           </span>
         ))
