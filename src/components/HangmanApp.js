@@ -91,15 +91,18 @@ const HangmanApp = () => {
     })
   }
 
-  const handleReset = () => {
+  // Initialize Game
+  const initializeGame = () => {
     dispatch({ type: 'RESET' })
     setGuesses({ type: 'RESET' })
     newPuzzle()
   }
 
-  useEffect(() => {
-    newPuzzle()
-  }, [])
+  // Initialize Game on Reset Button Click
+  const handleReset = () => initializeGame()
+
+  // Initialize Game on Page Load
+  useEffect(() => initializeGame(), [])
 
   return (
     <div>
@@ -120,4 +123,5 @@ const HangmanApp = () => {
     </div>
   )
 }
+
 export default HangmanApp
