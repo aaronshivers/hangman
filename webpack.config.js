@@ -1,4 +1,5 @@
 const path = require('path')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = env => {
   console.log(env)
@@ -19,9 +20,30 @@ module.exports = env => {
               presets: ['@babel/preset-env']
             }
           }
+        }, {
+          test: /\.css$/,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                hmr: env === 'development'
+              }
+            }, {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true
+              }
+            }
+          ]
         }
       ]
     },
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: '[name].css',
+        chunkFilename: '[id].css'
+      })
+    ],
     devServer: {
       contentBase: path.join(__dirname, 'public'),
       publicPath: '/dist/'
