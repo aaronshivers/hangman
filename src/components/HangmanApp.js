@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useReducer } from 'react'
 import Puzzle from './Puzzle'
-import Hangman from '../hangman'
+// import Hangman from '../hangman'
 
 const puzzleElement = document.querySelector('#puzzle')
 const guessesElement = document.querySelector('#guesses')
@@ -37,12 +37,23 @@ const startGame = async () => {
 
 // startGame()
 
-const HangmanApp = () => {
-  const [ guesses, setGuesses ] = useState(5)
+const initialState = { count: 5 }
 
-  if (guesses > 0) {
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'DECREMENT':
+      return { count: state.count - 1 }
+    case 'RESET':
+      return { count: 5 }
+  }
+}
+
+const HangmanApp = () => {
+  const [ state, dispatch ] = useReducer(reducer, initialState)
+
+  if (state.count > 0) {
     window.addEventListener('keypress', e => {
-      setGuesses(guesses => guesses - 1)
+      dispatch({ type: 'DECREMENT' })
     })
   }
 
@@ -51,12 +62,16 @@ const HangmanApp = () => {
       <Puzzle />
       
         {
-          guesses > 0 ?
-            <p>Remaining Guesses: { guesses }</p> :
+          state.count > 0 ?
+            <p>Remaining Guesses: { state.count }</p> :
             <p>Game Over</p>
         }
       
-      <button id="reset" className="button">Reset</button>
+      <button
+        id="reset"
+        className="button"
+        onClick={ () => dispatch({ type: 'RESET' }) }
+      >Reset</button>
     </div>
   )
 }
