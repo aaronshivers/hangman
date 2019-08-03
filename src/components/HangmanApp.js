@@ -53,6 +53,7 @@ const HangmanApp = () => {
 
   if (state.count > 0) {
     window.addEventListener('keypress', e => {
+      e.stopImmediatePropagation()
       dispatch({ type: 'DECREMENT' })
     })
   }
