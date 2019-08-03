@@ -66,20 +66,13 @@ const HangmanApp = () => {
   const [ game, setGame ] = useState('')
   const [ guesses, setGuesses ] = useReducer(guessReducer, [])
 
+  // Get a New Puzzle
   const getPuzzle = async (wordCount = '2') => {
     const url = `https://puzzle.mead.io/puzzle?wordCount=${ wordCount }`
     
-    try {
-      const response = await fetch(url)
-      const json = await response.json()
-      return response.ok ? json.puzzle : new Error('Unable to get new puzzle.')
-    } catch (error) {
-      return error
-    }
-  }
-
-  const newPuzzle = async () => {
-    setPuzzle(await getPuzzle())
+    const response = await fetch(url)
+    const json = await response.json()
+    setPuzzle(json.puzzle)
   }
 
   if (state.count > 0) {
@@ -95,7 +88,7 @@ const HangmanApp = () => {
   const initializeGame = () => {
     dispatch({ type: 'RESET' })
     setGuesses({ type: 'RESET' })
-    newPuzzle()
+    getPuzzle()
   }
 
   // Initialize Game on Reset Button Click
